@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log Processing Architecture</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="paper">
+  <h1 class="main-title">Workflow Prototype</h1>
+  <!-- Inputs Section matching the top of the drawing -->
+  <div class="inputs-section">
+    <div class="input-row"><label>log1 :</label><input type="text" id="log1"><span class="status-badge" id="status1"></span></div>
+    <div class="input-row"><label>log2 :</label><input type="text" id="log2"><span class="status-badge" id="status2"></span></div>
+    <div class="input-row"><label>log3 :</label><input type="text" id="log3"><span class="status-badge" id="status3"></span></div>
+    <div class="input-row"><label>log4 :</label><input type="text" id="log4"><span class="status-badge" id="status4"></span></div>
+    <div class="input-row"><label>log5 :</label><input type="text" id="log5"><span class="status-badge" id="status5"></span></div>
+    <div class="input-row"><label>log6 :</label><input type="text" id="log6"><span class="status-badge" id="status6"></span></div>
+    
+    <div class="action-row">
+      <span>select log</span>
+      <input type="number" id="select-log" min="1" max="6" step="1" placeholder="1">
+      <button id="run-btn">Run.</button>
+    </div>
+  </div>
+
+  <!-- Flowchart matching the bottom of the drawing -->
+  <div class="flowchart">
+    <svg class="connections">
+      <defs>
+        <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(255, 255, 255, 0.7)" />
+        </marker>
+      </defs>
+      
+      <!-- Ingestion (190, 40) to Raw log (380, 40) -->
+      <line x1="260" y1="40" x2="380" y2="40" marker-end="url(#arrowhead)" />
+      
+      <!-- Ingestion (190, 60) to Decision (190, 100) -->
+      <line x1="190" y1="60" x2="190" y2="100" marker-end="url(#arrowhead)" />
+      
+      <!-- Decision (190, 210) to Processing (190, 260) -->
+      <line x1="190" y1="210" x2="190" y2="260" marker-end="url(#arrowhead)" />
+      
+      <!-- Decision (245, 155) to Drain (380, 155) -->
+      <line x1="245" y1="155" x2="380" y2="155" marker-end="url(#arrowhead)" />
+      
+      <!-- Drain (450, 175) to Extracted (450, 230) -->
+      <line x1="450" y1="175" x2="450" y2="230" marker-end="url(#arrowhead)" />
+      
+      <!-- Extracted (450, 330) to ML (450, 380) -->
+      <line x1="450" y1="330" x2="450" y2="380" marker-end="url(#arrowhead)" />
+      
+      <!-- ML (450, 420) to Store (450, 460) -->
+      <line x1="450" y1="420" x2="450" y2="460" marker-end="url(#arrowhead)" />
+      
+      <!-- Processing (190, 300) to Normalization (190, 360) -->
+      <line x1="190" y1="300" x2="190" y2="360" marker-end="url(#arrowhead)" />
+      
+      <!-- Normalization (190, 400) to Final (190, 460) -->
+      <line x1="190" y1="400" x2="190" y2="460" marker-end="url(#arrowhead)" />
+      
+      <!-- Final (190, 620) to Data Lake (190, 650) -->
+      <line x1="190" y1="620" x2="190" y2="650" marker-end="url(#arrowhead)" />
+      
+      <!-- Data Lake (190, 690) to Analysis (190, 710) -->
+      <line x1="190" y1="690" x2="190" y2="710" marker-end="url(#arrowhead)" />
+      
+      <!-- Analysis (190, 750) to Final Message (190, 770) -->
+      <line x1="190" y1="750" x2="190" y2="770" marker-end="url(#arrowhead)" />
+      
+      <!-- Store to Processing with curly loop -->
+      <path d="M 380 480 
+               L 365 480 
+               C 355 450, 355 510, 345 480 
+               L 345 280 
+               L 260 280" marker-end="url(#arrowhead)" />
+    </svg>
+
+    <div id="ingestion" class="node node-std">Ingestion</div>
+    <div id="raw-log" class="node node-std">Raw log storage</div>
+    
+    <div id="decision" class="node-diamond-container">
+      <div class="node-diamond-bg" id="decision-bg"></div>
+      <div class="node-diamond-text">Pattern<br>known or<br>unknown?</div>
+    </div>
+    
+    <div id="drain-algo" class="node node-std">Drain algorithm</div>
+    
+    <div id="processing" class="node node-std">Processing</div>
+    
+    <div id="extracted" class="node node-tall">
+      <div class="header">Extracted fields</div>
+      <div id="extracted-body" style="font-size: 10px; text-align: left; padding: 4px; overflow-wrap: anywhere; overflow-y: auto; width: 100%; box-sizing: border-box;"></div>
+    </div>
+    
+    <div id="normalization" class="node node-std">Normalization</div>
+    <div id="ml-model" class="node node-std">ML model</div>
+    
+    <div id="final-format" class="node node-tall">
+      <div class="header">final format</div>
+      <div id="final-format-body" style="font-size: 10px; text-align: left; padding: 4px; overflow-wrap: anywhere; overflow-y: auto; width: 100%; box-sizing: border-box;"></div>
+    </div>
+    
+    <div id="store-pattern" class="node node-std">store pattern</div>
+    
+    <div id="data-lake" class="node node-std">Data Lake</div>
+    
+    <div id="analysis" class="node node-std">analysis</div>
+    
+    <div id="final-message-box" class="node node-tall">
+      <div class="header">Alert Message</div>
+      <div id="final-message-body" style="font-size: 11px; font-weight: bold; text-align: center; padding: 6px; overflow-wrap: anywhere; width: 100%; box-sizing: border-box;"></div>
+    </div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
