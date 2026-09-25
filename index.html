@@ -3,14 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Log Processing Architecture</title>
-<link rel="stylesheet" href="style.css">
+<title>ULPF Full Workflow</title>
+<link rel="stylesheet" href="workflow-full.css">
 </head>
 <body>
 
 <div class="paper">
-  <h1 class="main-title">Workflow Prototype</h1>
-  <!-- Inputs Section matching the top of the drawing -->
+  <h1 class="main-title">ULPF Workflow Prototype</h1>
+  <p class="subtitle">SIH26156 &mdash; full pipeline demonstration, including the AI-assisted recovery loop</p>
+
   <div class="inputs-section">
     <div class="input-row"><label>log1 :</label><input type="text" id="log1"><span class="status-badge" id="status1"></span></div>
     <div class="input-row"><label>log2 :</label><input type="text" id="log2"><span class="status-badge" id="status2"></span></div>
@@ -18,105 +19,130 @@
     <div class="input-row"><label>log4 :</label><input type="text" id="log4"><span class="status-badge" id="status4"></span></div>
     <div class="input-row"><label>log5 :</label><input type="text" id="log5"><span class="status-badge" id="status5"></span></div>
     <div class="input-row"><label>log6 :</label><input type="text" id="log6"><span class="status-badge" id="status6"></span></div>
-    
+
     <div class="action-row">
       <span>select log</span>
       <input type="number" id="select-log" min="1" max="6" step="1" placeholder="1">
       <button id="run-btn">Run.</button>
+      <span class="legend">
+        <span><i style="background:#10b981;"></i>on path / pass</span>
+        <span><i style="background:#ef4444;"></i>off path / fail</span>
+      </span>
     </div>
   </div>
 
-  <!-- Flowchart matching the bottom of the drawing -->
   <div class="flowchart">
+    <div class="async-container"><span class="label">Asynchronous AI recovery</span></div>
+
     <svg class="connections">
       <defs>
-        <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(255, 255, 255, 0.7)" />
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="rgba(255,255,255,0.5)" />
+        </marker>
+        <marker id="arrow-lit" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="#10b981" />
         </marker>
       </defs>
-      
-      <!-- Ingestion (190, 40) to Raw log (380, 40) -->
-      <line x1="260" y1="40" x2="380" y2="40" marker-end="url(#arrowhead)" />
-      
-      <!-- Ingestion (190, 60) to Decision (190, 100) -->
-      <line x1="190" y1="60" x2="190" y2="100" marker-end="url(#arrowhead)" />
-      
-      <!-- Decision (190, 210) to Processing (190, 260) -->
-      <line x1="190" y1="210" x2="190" y2="260" marker-end="url(#arrowhead)" />
-      
-      <!-- Decision (245, 155) to Drain (380, 155) -->
-      <line x1="245" y1="155" x2="380" y2="155" marker-end="url(#arrowhead)" />
-      
-      <!-- Drain (450, 175) to Extracted (450, 230) -->
-      <line x1="450" y1="175" x2="450" y2="230" marker-end="url(#arrowhead)" />
-      
-      <!-- Extracted (450, 330) to ML (450, 380) -->
-      <line x1="450" y1="330" x2="450" y2="380" marker-end="url(#arrowhead)" />
-      
-      <!-- ML (450, 420) to Store (450, 460) -->
-      <line x1="450" y1="420" x2="450" y2="460" marker-end="url(#arrowhead)" />
-      
-      <!-- Processing (190, 300) to Normalization (190, 360) -->
-      <line x1="190" y1="300" x2="190" y2="360" marker-end="url(#arrowhead)" />
-      
-      <!-- Normalization (190, 400) to Final (190, 460) -->
-      <line x1="190" y1="400" x2="190" y2="460" marker-end="url(#arrowhead)" />
-      
-      <!-- Final (190, 620) to Data Lake (190, 650) -->
-      <line x1="190" y1="620" x2="190" y2="650" marker-end="url(#arrowhead)" />
-      
-      <!-- Data Lake (190, 690) to Analysis (190, 710) -->
-      <line x1="190" y1="690" x2="190" y2="710" marker-end="url(#arrowhead)" />
-      
-      <!-- Analysis (190, 750) to Final Message (190, 770) -->
-      <line x1="190" y1="750" x2="190" y2="770" marker-end="url(#arrowhead)" />
-      
-      <!-- Store to Processing with curly loop -->
-      <path d="M 380 480 
-               L 365 480 
-               C 355 450, 355 510, 345 480 
-               L 345 280 
-               L 260 280" marker-end="url(#arrowhead)" />
+
+      <line id="l-source-ingestion" x1="365" y1="60" x2="365" y2="90" marker-end="url(#arrow)" />
+      <line id="l-ingestion-rawlog" x1="450" y1="115" x2="560" y2="115" marker-end="url(#arrow)" />
+      <line id="l-ingestion-broker" x1="365" y1="140" x2="365" y2="170" marker-end="url(#arrow)" />
+      <line id="l-broker-decision" x1="365" y1="210" x2="365" y2="250" marker-end="url(#arrow)" />
+      <line id="l-decision-unknown" x1="425" y1="310" x2="560" y2="310" marker-end="url(#arrow)" />
+      <line id="l-decision-normalization" x1="365" y1="370" x2="365" y2="400" marker-end="url(#arrow)" />
+      <line id="l-normalization-valid" x1="365" y1="440" x2="365" y2="470" marker-end="url(#arrow)" />
+      <line id="l-valid-failedq" x1="310" y1="525" x2="210" y2="525" marker-end="url(#arrow)" />
+      <line id="l-valid-common" x1="365" y1="580" x2="365" y2="620" marker-end="url(#arrow)" />
+      <line id="l-failedq-alert" x1="125" y1="545" x2="125" y2="575" marker-end="url(#arrow)" />
+      <line id="l-common-storing" x1="365" y1="870" x2="365" y2="900" marker-end="url(#arrow)" />
+      <line id="l-storing-dashboard" x1="365" y1="940" x2="365" y2="970" marker-end="url(#arrow)" />
+
+      <line id="l-unknownq-trigger" x1="655" y1="335" x2="655" y2="405" marker-end="url(#arrow)" />
+      <line id="l-unknownq-loop" class="loopback" x1="750" y1="310" x2="1040" y2="310" marker-end="url(#arrow)" />
+      <line id="l-trigger-drain3" x1="655" y1="445" x2="655" y2="475" marker-end="url(#arrow)" />
+      <line id="l-drain3-debert" x1="655" y1="565" x2="655" y2="595" marker-end="url(#arrow)" />
+      <line id="l-debert-ollama" x1="655" y1="685" x2="655" y2="715" marker-end="url(#arrow)" />
+      <line id="l-ollama-autovalid" x1="655" y1="805" x2="655" y2="835" marker-end="url(#arrow)" />
+      <line id="l-autovalid-red" x1="710" y1="890" x2="800" y2="890" marker-end="url(#arrow)" />
+      <line id="l-autovalid-pattern" x1="655" y1="945" x2="655" y2="985" marker-end="url(#arrow)" />
+
+      <path id="l-loop-decision" class="loopback" d="M 560 1030 L 480 1030 L 480 340 L 395 340" marker-end="url(#arrow)" />
+      <path id="l-loop-broker" class="loopback" d="M 655 1075 L 655 1095 L 1040 1095 L 1040 190 L 450 190" marker-end="url(#arrow)" />
     </svg>
 
-    <div id="ingestion" class="node node-std">Ingestion</div>
-    <div id="raw-log" class="node node-std">Raw log storage</div>
-    
-    <div id="decision" class="node-diamond-container">
-      <div class="node-diamond-bg" id="decision-bg"></div>
-      <div class="node-diamond-text">Pattern<br>known or<br>unknown?</div>
+    <div class="conn-label" style="top:285px; left:490px;">no</div>
+    <div class="conn-label" style="top:378px; left:375px;">yes</div>
+    <div class="conn-label" style="top:500px; left:250px;">no</div>
+    <div class="conn-label" style="top:588px; left:375px;">yes</div>
+    <div class="conn-label" style="top:865px; left:735px;">fail</div>
+    <div class="conn-label" style="top:905px; left:660px;">pass</div>
+    <div class="conn-label" style="top:640px; left:430px;">first this occurs</div>
+    <div class="conn-label" style="top:610px; left:1050px; width:80px;">this occurs after first</div>
+    <div class="conn-label" style="top:295px; left:800px; width:150px;">pushes the unknown logs again</div>
+
+    <div id="source" class="node" style="top:20px; left:280px; width:170px; height:40px;">Source</div>
+    <div id="ingestion" class="node" style="top:90px; left:280px; width:170px; height:50px;">Ingestion engine<br><span style="font-size:9px;color:#94a3b8;">mask + attach UUID</span></div>
+    <div id="rawlog" class="node node-cyl" style="top:90px; left:560px; width:190px; height:50px;">Raw log storage (MinIO)</div>
+    <div id="broker" class="node" style="top:170px; left:280px; width:170px; height:40px;">Message broker (Redpanda)</div>
+
+    <div id="decision" class="node-diamond-container" style="top:250px; left:305px; width:120px; height:120px;">
+      <div class="node-diamond-bg"></div>
+      <div class="node-diamond-text">Format<br>known?</div>
     </div>
-    
-    <div id="drain-algo" class="node node-std">Drain algorithm</div>
-    
-    <div id="processing" class="node node-std">Processing</div>
-    
-    <div id="extracted" class="node node-tall">
-      <div class="header">Extracted fields</div>
-      <div id="extracted-body" style="font-size: 10px; text-align: left; padding: 4px; overflow-wrap: anywhere; overflow-y: auto; width: 100%; box-sizing: border-box;"></div>
+
+    <div id="normalization" class="node" style="top:400px; left:280px; width:170px; height:40px;">Normalization</div>
+
+    <div id="valid" class="node-diamond-container" style="top:470px; left:310px; width:110px; height:110px;">
+      <div class="node-diamond-bg"></div>
+      <div class="node-diamond-text">Valid &amp;<br>passes?</div>
     </div>
-    
-    <div id="normalization" class="node node-std">Normalization</div>
-    <div id="ml-model" class="node node-std">ML model</div>
-    
-    <div id="final-format" class="node node-tall">
-      <div class="header">final format</div>
-      <div id="final-format-body" style="font-size: 10px; text-align: left; padding: 4px; overflow-wrap: anywhere; overflow-y: auto; width: 100%; box-sizing: border-box;"></div>
+
+    <div id="failedq" class="node node-cyl" style="top:505px; left:40px; width:170px; height:40px;">Failed validation queue (DLQ)</div>
+    <div id="alert-green" class="node node-tall" style="top:575px; left:40px; width:170px; height:90px;">
+      <div class="header">Alert admin</div>
+      <div class="body" id="alert-green-body"></div>
     </div>
-    
-    <div id="store-pattern" class="node node-std">store pattern</div>
-    
-    <div id="data-lake" class="node node-std">Data Lake</div>
-    
-    <div id="analysis" class="node node-std">analysis</div>
-    
-    <div id="final-message-box" class="node node-tall">
-      <div class="header">Alert Message</div>
-      <div id="final-message-body" style="font-size: 11px; font-weight: bold; text-align: center; padding: 6px; overflow-wrap: anywhere; width: 100%; box-sizing: border-box;"></div>
+
+    <div id="common" class="node node-tall" style="top:620px; left:280px; width:170px; height:250px;">
+      <div class="header">Common format (OCSF)</div>
+      <div class="body" id="common-body"></div>
+    </div>
+    <div id="storing" class="node" style="top:900px; left:280px; width:170px; height:40px;">Storing in OpenSearch</div>
+    <div id="dashboard" class="node" style="top:970px; left:280px; width:170px; height:50px;">Visual dashboard</div>
+
+    <div id="unknownq" class="node node-cyl" style="top:285px; left:560px; width:190px; height:50px;">Unknown format queue (DLQ)</div>
+    <div id="trigger" class="node" style="top:405px; left:560px; width:190px; height:40px;">AI pipeline trigger</div>
+
+    <div id="drain3" class="node node-tall" style="top:475px; left:560px; width:190px; height:90px;">
+      <div class="header">Drain3</div>
+      <div class="body" id="drain3-body">Extracts dynamic fields</div>
+    </div>
+    <div id="debert" class="node node-tall" style="top:595px; left:560px; width:190px; height:90px;">
+      <div class="header">DE-BERT model</div>
+      <div class="body" id="debert-body">Identifies extracted fields</div>
+    </div>
+    <div id="ollama" class="node node-tall" style="top:715px; left:560px; width:190px; height:90px;">
+      <div class="header">Ollama (Qwen model)</div>
+      <div class="body" id="ollama-body">Creates new pattern</div>
+    </div>
+
+    <div id="autovalid" class="node-diamond-container" style="top:835px; left:600px; width:110px; height:110px;">
+      <div class="node-diamond-bg"></div>
+      <div class="node-diamond-text">Automated<br>validation<br>node</div>
+    </div>
+
+    <div id="alert-red" class="node node-tall" style="top:845px; left:800px; width:170px; height:90px;">
+      <div class="header">Alert admin</div>
+      <div class="body" id="alert-red-body"></div>
+    </div>
+
+    <div id="pattern" class="node node-tall" style="top:985px; left:560px; width:190px; height:90px;">
+      <div class="header">New pattern stored</div>
+      <div class="body" id="pattern-body"></div>
     </div>
   </div>
 </div>
 
-<script src="script.js"></script>
+<script src="workflow-full.js"></script>
 </body>
 </html>

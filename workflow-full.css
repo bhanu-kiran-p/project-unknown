@@ -1,0 +1,283 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: radial-gradient(circle at top left, #1e293b, #0f172a);
+  color: #e2e8f0;
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.paper {
+  background: rgba(30, 41, 59, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  width: 1180px;
+  padding: 50px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  position: relative;
+}
+
+.main-title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 36px;
+}
+
+.inputs-section {
+  margin-bottom: 40px;
+  padding-left: 20px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.input-row label {
+  width: 50px;
+  margin-right: 10px;
+  text-align: right;
+  font-weight: 300;
+  color: #cbd5e1;
+}
+
+.input-row input[type="text"] {
+  width: 640px;
+  height: 26px;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent;
+  color: #f8fafc;
+  outline: none;
+  font-family: 'Inter', monospace;
+  font-size: 12px;
+}
+
+.input-row input[type="text"]:focus {
+  border-bottom: 1px solid #3b82f6;
+}
+
+.status-badge {
+  margin-left: 15px;
+  padding: 4px 10px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 12px;
+  min-width: 60px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-known { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+.badge-unknown { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+.badge-invalid { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+.action-row {
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  font-size: 14px;
+  gap: 12px;
+}
+
+.action-row input[type="number"] {
+  width: 50px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(15, 23, 42, 0.5);
+  color: white;
+  border-radius: 6px;
+  outline: none;
+  padding-left: 10px;
+}
+
+.action-row button {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.action-row button:hover { transform: translateY(-2px); }
+
+.legend {
+  display: flex;
+  gap: 18px;
+  margin-left: auto;
+  font-size: 11px;
+  color: #94a3b8;
+}
+.legend span { display: flex; align-items: center; gap: 5px; }
+.legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+
+.flowchart {
+  position: relative;
+  width: 100%;
+  height: 1150px;
+  margin-top: 30px;
+}
+
+.async-container {
+  position: absolute;
+  top: 365px;
+  left: 530px;
+  width: 480px;
+  height: 750px;
+  border: 1.5px dashed rgba(251, 146, 60, 0.5);
+  background: rgba(251, 146, 60, 0.04);
+  border-radius: 12px;
+  z-index: 0;
+}
+.async-container .label {
+  position: absolute;
+  top: -11px;
+  left: 16px;
+  background: #0f172a;
+  padding: 0 8px;
+  font-size: 11px;
+  color: #fb923c;
+  letter-spacing: 0.5px;
+}
+
+.node {
+  position: absolute;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(10px);
+  color: #f8fafc;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 400;
+  z-index: 10;
+  transition: all 0.4s ease;
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+
+.node-cyl { border-radius: 40px / 14px; }
+
+.node-tall {
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0;
+}
+.node-tall .header {
+  width: 100%;
+  text-align: center;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.35);
+  padding: 6px 0;
+  font-weight: 600;
+  font-size: 11px;
+  border-radius: 8px 8px 0 0;
+}
+.node-tall .body {
+  font-size: 10px;
+  text-align: left;
+  padding: 5px 7px;
+  overflow-wrap: anywhere;
+  width: 100%;
+  box-sizing: border-box;
+  color: #cbd5e1;
+  line-height: 1.4;
+}
+
+.node-diamond-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+.node-diamond-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(10px);
+  transform: rotate(45deg);
+  border-radius: 12px;
+  z-index: -1;
+  transition: all 0.4s ease;
+}
+.node-diamond-text {
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.35;
+  color: #f8fafc;
+  padding: 0 10px;
+}
+
+.node.active, .node-diamond-container.active .node-diamond-bg {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: #10b981;
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.35);
+}
+.node.error, .node-diamond-container.error .node-diamond-bg {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
+}
+.node.pending-ai {
+  background: rgba(139, 92, 246, 0.18);
+  border-color: #8b5cf6;
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.3);
+}
+
+.connections {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.connections path, .connections line {
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 2px;
+  fill: none;
+  transition: stroke 0.4s ease;
+}
+.connections .loopback {
+  stroke-dasharray: 5 4;
+}
+.connections path.lit, .connections line.lit {
+  stroke: #10b981;
+  stroke-width: 2.5px;
+}
+.conn-label {
+  position: absolute;
+  font-size: 10px;
+  color: #94a3b8;
+  z-index: 2;
+  max-width: 140px;
+}
