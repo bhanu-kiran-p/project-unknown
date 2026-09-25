@@ -76,23 +76,23 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('ingestion').classList.add('active');
             
             // 2. Raw log storage green (after 2s)
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('raw-log').classList.add('active');
             
             // 3. Pattern known green (after 2s)
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('decision').classList.add('active');
             
             // 4. Processing green (after 2s)
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('processing').classList.add('active');
             
             // 5. Normalization green (after 2s)
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('normalization').classList.add('active');
             
             // 6. Final format shows JSON (after 2s)
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('final-format').classList.add('active');
             
             const rawLog = logData[`log${logNumber}`];
@@ -112,15 +112,15 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('final-format-body').innerText = JSON.stringify(logObj, null, 2);
             
             // 6. Data Lake green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('data-lake').classList.add('active');
             
             // 7. Analysis green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('analysis').classList.add('active');
             
             // 8. Final Message Box (does not turn green, just shows message)
-            await sleep(2000);
+            await sleep(2500);
             const msgBody = document.getElementById('final-message-body');
             msgBody.innerText = message;
             const isNegative = ['ERROR', 'WARN', 'FATAL'].includes(level.trim());
@@ -132,19 +132,19 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('ingestion').classList.add('active');
             
             // 2. Raw log storage green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('raw-log').classList.add('active');
             
             // 3. Pattern known red
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('decision').classList.add('error');
             
             // 4. Drain algorithm green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('drain-algo').classList.add('active');
             
             // 5. Extracted fields green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('extracted').classList.add('active');
             
             const rawLogStr = logData[`log${logNumber}`];
@@ -157,23 +157,23 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('extracted-body').innerText = `v1: ${ts}\nv2: ${lvl}\nv3: ${msg}`;
             
             // 6. ML model green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('ml-model').classList.add('active');
             
             // 7. Store pattern green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('store-pattern').classList.add('active');
             
             // 8. Processing green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('processing').classList.add('active');
             
             // 9. Normalization green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('normalization').classList.add('active');
             
             // 10. Final format JSON
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('final-format').classList.add('active');
             
             const rawLog = logData[`log${logNumber}`];
@@ -192,15 +192,15 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('final-format-body').innerText = JSON.stringify(logObj, null, 2);
             
             // 11. Data Lake green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('data-lake').classList.add('active');
             
             // 12. Analysis green
-            await sleep(2000);
+            await sleep(2500);
             document.getElementById('analysis').classList.add('active');
             
             // 13. Final Message Box (does not turn green, just shows message)
-            await sleep(2000);
+            await sleep(2500);
             const msgBody = document.getElementById('final-message-body');
             msgBody.innerText = message;
             const isNegative = ['ERROR', 'WARN', 'FATAL'].includes(level.trim());

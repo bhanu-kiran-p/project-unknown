@@ -11,7 +11,7 @@ const LOG_DATA = {
 // invalid = matches a pattern but fails post-normalization validation
 const LOG_TYPES = ["known", "unknown", "invalid", "unknown", "known", "invalid"];
 
-const STEP_DELAY = 750;
+const STEP_DELAY = 2500;
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function populateLogs() {
